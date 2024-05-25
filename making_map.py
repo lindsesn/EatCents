@@ -1,16 +1,19 @@
 #adding map
+import pandas as pd
 import plotly.graph_objects as go
 
+
+token = 'pk.eyJ1IjoibmF0aGFsaWVjaGl1dSIsImEiOiJjbHdtamZmcXUxdWpwMml0Z2pxc3Znc3A2In0.YudR05400cNQ08lFk67_Jw'
 def making_map(name, lat, lon):
-    mapbox_access_token = open(".mapbox_token").read()
+    mapbox_access_token = token
     fig = go.Figure(go.Scattermapbox(
-        lat = [lat[name]['latitude']],
-        lon = [lon[name]['longitude']],
+        lat = lat,
+        lon = lon,
         mode = 'markers',
         marker = go.scattermapbox.Marker(
             size = 10
         ),
-        text = [name]
+        text = name
     ))
 
     fig.update_layout(
@@ -20,8 +23,8 @@ def making_map(name, lat, lon):
             accesstoken= mapbox_access_token,
             bearing=0,
             center=dict(
-                lat= lat[name]['latitude'],
-                lon= [lon[name]['longitude']],
+                lat= lat[0],
+                lon= lon[0],
             ),
             pitch=0,
             zoom=10,
