@@ -1,6 +1,7 @@
 import requests
 import json
-import plotly.graph_objects as go
+from collections import namedtuple
+from map import making_map
 
 
 # global variables
@@ -15,7 +16,7 @@ def main(location):
     API_url = f'https://api.yelp.com/v3/businesses/search?location={location}'
     parameter = {'limit': 50}
     main_set = []
-    Restaurant = namedtuple('Restaurant', ['name', 'price', 'coordinates'])
+    Restuarant = namedtuple('Restaurant', ['name', 'price', 'coordinates'])
 
     try:
         response = requests.get(url = API_url, headers = headers, params = parameter)
@@ -29,6 +30,8 @@ def main(location):
         # sorted_restaurant_loc_dict = {}
         latitude_list = []
         longitude_list = []
+        price_list = []
+        name_list = []
 
         for business in data['businesses']:
             c_name = ''
@@ -41,7 +44,7 @@ def main(location):
                     c_price = business['price']
                     c_coord = business['coordinates']
                     # c_rating = business['rating']
-                    r_tuple = Restaurant(c_name, c_price, c_coord)
+                    r_tuple = Restuarant(c_name, c_price, c_coord)
                     main_set.append(r_tuple)
 
 
@@ -50,7 +53,7 @@ def main(location):
                     c_price = business['price']
                     c_coord = business['coordinates']
                     # c_rating = business['rating']
-                    r_tuple = Restaurant(c_name, c_price, c_coord)
+                    r_tuple = Restuarant(c_name, c_price, c_coord)
                     main_set.append(r_tuple)
 
             except KeyError:
@@ -60,11 +63,14 @@ def main(location):
 
         # latitude and longitude lists
         for rest_name in main_set:
+            name_list.append(rest_name.name)
             latitude_list.append(rest_name.coordinates['latitude'])
             longitude_list.append(rest_name.coordinates['longitude'])
+            price_list.append(rest_name.price)
         # print(latitude_list)
         # print(longitude_list)
 
+        making_map(name_list, latitude_list, longitude_list, price_list)
 
     except:
         print('400 Bad Request')
