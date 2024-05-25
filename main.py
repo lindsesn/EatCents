@@ -15,13 +15,41 @@ def main(location):
         if response.ok:
             data = response.json()
             print(data)
+            print("================")
+
+        sorted_restaurant = {}
+        sorted_restaurant_loc_dict = {}
+        latitude_list = []
+        longitude_list = []
+
 
         for business in data['businesses']:
             try:
-                if business['price'] == '$' or business['price'] == '$$':
-                    print(f"{business['name']}: {business['price']}")
+                if business['price'] == '$':
+                    sorted_restaurant[business['name']] = business['price']
+                    sorted_restaurant_loc_dict[business['name']] = business['coordinates']
+                    #print(sorted_restaurant_loc_dict[business['name']])
+                if business['price'] == '$$':
+                    sorted_restaurant[business['name']] = business['price']
+                    sorted_restaurant_loc_dict[business['name']] = business['coordinates']
+                    # print(sorted_restaurant_loc_dict[business['name']])
+                    #print(f"{business['name']}: {business['price']}")
+
             except KeyError: # KeyError triggers if business does not have a price level shown
                 pass
+
+        print(f"Restaurants sorted from $ to $$ in {location}: \n\n{sorted_restaurant}")
+        # print(sorted_restaurant_loc_dict)
+
+        for rest_name in sorted_restaurant_loc_dict:
+            latitude_list.append(rest_name['latitude'])
+            longitude_list.append(rest_name['longitude'])
+        print(latitude_list)
+        print(longitude_list)
+
+
+        #making_map(name=name, lat=sorted_restaurant_loc_dict, lon=sorted_restaurant_loc_dict)
+
 
     except:
         print('400 Bad Request')
