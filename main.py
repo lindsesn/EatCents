@@ -15,7 +15,7 @@ def main(location):
     API_url = f'https://api.yelp.com/v3/businesses/search?location={location}'
     parameter = {'limit': 50}
     main_set = []
-    Restuarant = namedtuple('Restaurant', ['name', 'price', 'coordinates'])
+    Restaurant = namedtuple('Restaurant', ['name', 'price', 'coordinates'])
 
     try:
         response = requests.get(url = API_url, headers = headers, params = parameter)
