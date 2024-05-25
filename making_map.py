@@ -6,11 +6,12 @@ token = 'pk.eyJ1IjoibmF0aGFsaWVjaGl1dSIsImEiOiJjbHdtamZmcXUxdWpwMml0Z2pxc3Znc3A2
 def making_map(name, lat, lon):
     mapbox_access_token = token
     fig = go.Figure(go.Scattermapbox(
+        style = 'basic',
         lat = lat,
         lon = lon,
         mode = 'markers',
         marker = go.scattermapbox.Marker(
-            size = 10
+            size = 11
         ),
         text = name
     ))

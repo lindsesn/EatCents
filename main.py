@@ -41,7 +41,7 @@ def main(location):
                     c_price = business['price']
                     c_coord = business['coordinates']
                     # c_rating = business['rating']
-                    r_tuple = Restuarant(c_name, c_price, c_coord)
+                    r_tuple = Restaurant(c_name, c_price, c_coord)
                     main_set.append(r_tuple)
 
 
@@ -50,7 +50,7 @@ def main(location):
                     c_price = business['price']
                     c_coord = business['coordinates']
                     # c_rating = business['rating']
-                    r_tuple = Restuarant(c_name, c_price, c_coord)
+                    r_tuple = Restaurant(c_name, c_price, c_coord)
                     main_set.append(r_tuple)
 
             except KeyError:
