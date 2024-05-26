@@ -2,7 +2,13 @@ import requests
 import json
 from collections import namedtuple
 from map import making_map
+from flask import Flask, render_template, request
+from flask_cors import CORS, cross_origin
 
+
+app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # global variables
 API_url = ''
@@ -12,7 +18,9 @@ headers = {
 
 
 # functions
-def main(location):
+@app.route("/")
+def main():
+    location = request.json_data()
     API_url = f'https://api.yelp.com/v3/businesses/search?location={location}'
     parameter = {'limit': 50}
     main_set = []
@@ -24,7 +32,7 @@ def main(location):
         if response.ok:
             data = response.json()
             # print(data)
-            # print("================")
+            print("================")
 
         # sorted_restaurant = {}
         # sorted_restaurant_loc_dict = {}
@@ -77,6 +85,7 @@ def main(location):
 
 
 if __name__ == "__main__":
+    app.run(host = '0.0.0.0', port = 3000)
     print("Welcome to Eatcents !! ")
     city = input('What city would you like to search?: ')
     main(city)
