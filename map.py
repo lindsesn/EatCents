@@ -12,32 +12,41 @@ def set_color(price):
             color_list.append("pink")
     return color_list
 
+def set_size(rating):
+    rating_list = []
+    for r in rating:
+        rating_list.append(float(r)**4/20)
+    return rating_list
 
-def making_map(name, lat, lon, price):
+
+def making_map(name, lat, lon, price, rating):
 
     mapbox_access_token = token
+
 
     fig = go.Figure(go.Scattermapbox(
         lat = lat,
         lon = lon,
         mode = 'markers',
         marker = go.scattermapbox.Marker(
-            size = 10,
+            size = set_size(rating),
             color = set_color(price),
-            opacity = 0.75
+            opacity = 0.5,
         ),
         text = name,
         customdata = price,
-        hovertemplate = 'Restaurant: %{text}'+'<br>Coordinate: (%{lat},%{lon})'+'<br>Price: %{customdata}'
+        hovertemplate = 'Restaurant: %{text}'+'<br>Coordinate: (%{lat},%{lon})'+'<br>Price: %{customdata}',
+        showlegend = True
     ))
 
-    #hovertemplate = 'Price: %{price}'+'<br>Coordinate: %{lat}%{lon}'
 
+    #hovertemplate = 'Price: %{price}'+'<br>Coordinate: %{lat}%{lon}'
+    fig.update_layout(title="Map of Restaurants with one/two dollar sign")
     fig.update_layout(
         autosize = True,
         hovermode = 'closest',
         mapbox=dict(
-            accesstoken= mapbox_access_token,
+            accesstoken = mapbox_access_token,
             style = 'dark',
             bearing=0,
             center=dict(
@@ -45,8 +54,9 @@ def making_map(name, lat, lon, price):
                 lon= lon[0],
             ),
             pitch=0,
-            zoom=11,
+            zoom=12,
         ),
     )
 
+    #ax.legend()
     fig.show()
