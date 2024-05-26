@@ -2,29 +2,60 @@ import requests
 import json
 from collections import namedtuple
 from map import making_map
-# from flask import Flask, render_template, request
-# from flask_cors import CORS, cross_origin
-#
-#
-# app = Flask(__name__)
-# cors = CORS(app)
-# app.config['CORS_HEADERS'] = 'Content-Type'
+from dash import Dash, dcc, html, no_update
+from dash.dependencies import Output, Input, State
 
 
+# global variables
 API_url = ''
 headers = {
     "Authorization": "Bearer SU2UrP6AOSyh1kzid0InZsT_QrnCw71FYgT9O1goVd1481qOD5sCkRKkwpUMB6ZlyzLnw--TJCiII7w0ywF6HKsaTsS046M8TZvZwAlFY75MHSBBoyPxMuI2exVSZnYx",
     "accept": "application/json"}
 
 
-# functions
-@app.route("/")
+# creating hmtl
 def main():
-    location = requests.json_data()
+    app = Dash()
+    app.layout = html.Div([
+        html.H1("Welcome to EatCents !!"),
+        html.H3("Find the most affordable restaurants (in $ currency) in your area"),
+        html.Div(
+            [
+                "City Name: ",
+                dcc.Input(id = 'my-input', value = '', type = 'text')
+            ],
+        ),
+        html.Button(id = 'submit-button', type = 'submit', children = 'Submit'),
+        html.Br(),
+        html.Div(id = 'my-output')
+
+    ])
+
+    @app.callback(
+        [Output('my-output', 'children')],
+        [Input('submit-button', 'n_clicks')],
+        [State('my-input', 'value')],
+    )
+    def update_output(clicks, input_value):
+        # print("YESOSEFS")
+        if clicks is not None:
+            # print("PELASE")
+            map = generate_map(input_value)
+            # print("DEAR LORD< SEFS", map)
+            # print(clicks, input_value)
+            return [dcc.Graph(id = "mappy", figure = map)]
+        else:
+            return no_update
+
+    app.run_server(debug = True, use_reloader = False)
+
+
+# functions
+def generate_map(location):
     API_url = f'https://api.yelp.com/v3/businesses/search?location={location}'
     parameter = {'limit': 50}
     main_set = []
-    Restuarant = namedtuple('Restaurant', ['name', 'price', 'coordinates'])
+    Restuarant = namedtuple('Restaurant', ['name', 'price', 'coordinates', 'rating'])
 
     try:
         response = requests.get(url = API_url, headers = headers, params = parameter)
@@ -32,7 +63,7 @@ def main():
         if response.ok:
             data = response.json()
             # print(data)
-            print("================")
+            # print("================")
 
         # sorted_restaurant = {}
         # sorted_restaurant_loc_dict = {}
@@ -40,19 +71,21 @@ def main():
         longitude_list = []
         price_list = []
         name_list = []
+        rating_list = []
 
         for business in data['businesses']:
             c_name = ''
             c_price = ''
             c_coord = {}
+            c_rate = ''
 
             try:
                 if business['price'] == '$':
                     c_name = business['name']
                     c_price = business['price']
                     c_coord = business['coordinates']
-                    # c_rating = business['rating']
-                    r_tuple = Restuarant(c_name, c_price, c_coord)
+                    c_rate = business['rating']
+                    r_tuple = Restuarant(c_name, c_price, c_coord, c_rate)
                     main_set.append(r_tuple)
 
 
@@ -60,14 +93,14 @@ def main():
                     c_name = business['name']
                     c_price = business['price']
                     c_coord = business['coordinates']
-                    # c_rating = business['rating']
-                    r_tuple = Restuarant(c_name, c_price, c_coord)
+                    c_rate = business['rating']
+                    r_tuple = Restuarant(c_name, c_price, c_coord, c_rate)
                     main_set.append(r_tuple)
 
             except KeyError:
                 pass
 
-        print(main_set)
+        # print(main_set)
 
         # latitude and longitude lists
         for rest_name in main_set:
@@ -75,17 +108,17 @@ def main():
             latitude_list.append(rest_name.coordinates['latitude'])
             longitude_list.append(rest_name.coordinates['longitude'])
             price_list.append(rest_name.price)
+            rating_list.append(rest_name.rating)
         # print(latitude_list)
         # print(longitude_list)
+        # print(rating_list)
 
-        making_map(name_list, latitude_list, longitude_list, price_list)
+        return making_map(name_list, latitude_list, longitude_list, price_list, rating_list)
 
     except:
         print('400 Bad Request')
 
 
 if __name__ == "__main__":
-    app.run(host = '0.0.0.0', port = 3000)
     print("Welcome to Eatcents !! ")
-    city = input('What city would you like to search?: ')
-    main(city)
+    main()
