@@ -21,7 +21,7 @@ def set_size(rating):
     return rating_list
 
 
-# adding map
+# generate + add map
 def making_map(name, lat, lon, price, rating):
     mapbox_access_token = token
 
@@ -40,8 +40,7 @@ def making_map(name, lat, lon, price, rating):
         showlegend = True
     ))
 
-    # hovertemplate = 'Price: %{price}'+'<br>Coordinate: %{lat}%{lon}'
-    fig.update_layout(title = "Map of Restaurants with one/two dollar sign")
+    fig.update_layout(title = "Restaurants with one/two dollar sign label on Yelp")
     fig.update_layout(
         width = 1400,
         height = 700,
@@ -61,5 +60,5 @@ def making_map(name, lat, lon, price, rating):
     )
     return fig
 
-    # ax.legend()
+    # map pops up on new page
     # fig.show()
