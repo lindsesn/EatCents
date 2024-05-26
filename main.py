@@ -24,7 +24,7 @@ def main(location):
         if response.ok:
             data = response.json()
             # print(data)
-            print("================")
+            # print("================")
 
         # sorted_restaurant = {}
         # sorted_restaurant_loc_dict = {}
