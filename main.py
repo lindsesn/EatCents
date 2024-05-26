@@ -2,15 +2,15 @@ import requests
 import json
 from collections import namedtuple
 from map import making_map
-from flask import Flask, render_template, request
-from flask_cors import CORS, cross_origin
+# from flask import Flask, render_template, request
+# from flask_cors import CORS, cross_origin
+#
+#
+# app = Flask(__name__)
+# cors = CORS(app)
+# app.config['CORS_HEADERS'] = 'Content-Type'
 
 
-app = Flask(__name__)
-cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
-
-# global variables
 API_url = ''
 headers = {
     "Authorization": "Bearer SU2UrP6AOSyh1kzid0InZsT_QrnCw71FYgT9O1goVd1481qOD5sCkRKkwpUMB6ZlyzLnw--TJCiII7w0ywF6HKsaTsS046M8TZvZwAlFY75MHSBBoyPxMuI2exVSZnYx",
@@ -20,7 +20,7 @@ headers = {
 # functions
 @app.route("/")
 def main():
-    location = request.json_data()
+    location = requests.json_data()
     API_url = f'https://api.yelp.com/v3/businesses/search?location={location}'
     parameter = {'limit': 50}
     main_set = []
