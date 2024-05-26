@@ -13,7 +13,7 @@ headers = {
     "accept": "application/json"}
 
 
-# creating hmtl
+# creating html
 def main():
     app = Dash()
     app.layout = html.Div([
