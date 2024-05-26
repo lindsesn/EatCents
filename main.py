@@ -37,12 +37,8 @@ def main():
         [State('my-input', 'value')],
     )
     def update_output(clicks, input_value):
-        # print("YESOSEFS")
         if clicks is not None:
-            # print("PELASE")
             map = generate_map(input_value)
-            # print("DEAR LORD< SEFS", map)
-            # print(clicks, input_value)
             return [dcc.Graph(id = "mappy", figure = map)]
         else:
             return no_update
@@ -62,11 +58,8 @@ def generate_map(location):
 
         if response.ok:
             data = response.json()
-            # print(data)
-            # print("================")
 
-        # sorted_restaurant = {}
-        # sorted_restaurant_loc_dict = {}
+
         latitude_list = []
         longitude_list = []
         price_list = []
@@ -100,7 +93,6 @@ def generate_map(location):
             except KeyError:
                 pass
 
-        # print(main_set)
 
         # latitude and longitude lists
         for rest_name in main_set:
@@ -109,9 +101,7 @@ def generate_map(location):
             longitude_list.append(rest_name.coordinates['longitude'])
             price_list.append(rest_name.price)
             rating_list.append(rest_name.rating)
-        # print(latitude_list)
-        # print(longitude_list)
-        # print(rating_list)
+
 
         return making_map(name_list, latitude_list, longitude_list, price_list, rating_list)
 
